@@ -1188,3 +1188,250 @@ blockquote {
 
 .panorama>canvas{z-index:0}.panorama>.film-texture{z-index:1}.stage-shade{z-index:2}.hotspot-layer{z-index:4}.stage-top,.scene-caption,.drag-hint,.compass{z-index:3}
 .voices{min-width:0}
+
+/* —— 热点聚合 —— */
+.hotspot-layer.is-hidden {
+  display: none;
+}
+.hotspot {
+  /* 位置每帧跟随投影，不加位移过渡，否则拖动全景时标记会滞后于画面。 */
+  will-change: left, top;
+}
+.hotspot > span {
+  position: relative;
+}
+.marker-count {
+  font: 500 17px/1 "Noto Serif SC", serif;
+  letter-spacing: 0;
+}
+.hotspot.is-cluster > span {
+  border-color: #dfecd4d9;
+  background: #234135e0;
+  box-shadow:
+    0 0 0 7px #d2e4c81f,
+    0 0 0 1px #cfe3d033;
+}
+.hotspot.is-cluster strong {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.marker-saved {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #b7d2bc;
+  color: #17362a;
+  box-shadow: 0 0 0 2px #14211fd9;
+}
+.hotspot.is-partly-saved .marker-saved {
+  background: #24392f;
+  color: #cfe4d2;
+  border: 1px solid #b7d2bc;
+}
+.hotspot.is-saved strong {
+  color: #d7e9d8;
+}
+.marker-fresh {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #e6d4a8;
+  box-shadow: 0 0 0 3px #e6d4a833;
+  animation: fresh-pulse 2.2s ease-in-out infinite;
+}
+@keyframes fresh-pulse {
+  50% {
+    box-shadow: 0 0 0 6px #e6d4a81a;
+  }
+}
+.hotspot.is-expanded > span {
+  border-color: #e2f0da;
+  background: #2a493c;
+  box-shadow: 0 0 0 7px #d2e4c826;
+}
+/* 展开列表里的成员按钮不继承标记的圆形样式。 */
+.hotspot.is-cluster.is-expanded > span {
+  background: #2a493c;
+}
+.hotspot.is-historical {
+  opacity: 0.72;
+}
+.hotspot.is-historical small {
+  color: #c9bda0;
+}
+
+.cluster-popover {
+  position: absolute;
+  z-index: 7;
+  background: #142526f7;
+  border: 1px solid #91bba654;
+  border-radius: 5px;
+  box-shadow: 0 18px 60px #0007;
+  backdrop-filter: blur(8px);
+  overflow: auto;
+  text-shadow: none;
+  cursor: default;
+}
+.cluster-popover header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px 9px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #a4bda9;
+  position: sticky;
+  top: 0;
+  background: #142526f7;
+}
+.cluster-popover header > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.cluster-popover .cluster-saved {
+  color: #cfe1c9;
+}
+.cluster-close {
+  margin-left: auto;
+  padding: 2px;
+  color: #8fa697;
+}
+.cluster-members {
+  padding: 6px;
+}
+.hotspot-member {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  text-align: left;
+  padding: 8px 8px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  white-space: normal;
+}
+.hotspot-member:hover {
+  background: #b4d5c00d;
+}
+.hotspot-member.is-selected {
+  border-color: #b4d5c040;
+  background: #b4d5c014;
+}
+.hotspot-member.is-historical {
+  opacity: 0.72;
+}
+.member-index {
+  width: 15px;
+  flex-shrink: 0;
+  font-size: 8px;
+  color: #6e8a7a;
+  letter-spacing: 1px;
+}
+.member-icon {
+  width: 27px;
+  height: 27px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid #dfecd44d;
+  background: #203c3280;
+  color: #d2e4cf;
+}
+.member-text {
+  min-width: 0;
+  flex: 1;
+}
+.member-text b {
+  display: block;
+  font-weight: 400;
+  font-size: 11px;
+  color: #dbe6da;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.member-text small {
+  display: block;
+  margin-top: 3px;
+  font-size: 8px;
+  color: #8ba392;
+  letter-spacing: 0.5px;
+}
+.hotspot-member.is-fresh .member-text small {
+  color: #dcc99b;
+}
+.member-saved {
+  color: #c3dcc5;
+  flex-shrink: 0;
+}
+.member-history {
+  color: #c9bda0;
+  flex-shrink: 0;
+}
+
+.history-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border: 1px solid #c9bda055;
+  border-radius: 2px;
+  color: #d2c39f;
+  letter-spacing: 0.5px;
+}
+.detail-card.is-historical {
+  border-color: #c9bda044;
+}
+.history-note {
+  font-size: 10px !important;
+  color: #c8bd9f !important;
+  border-left: 2px solid #c9bda066;
+  padding-left: 10px;
+  margin: -8px 0 18px !important;
+  line-height: 1.7;
+}
+.detail-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-bottom: 6px;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #8fa697;
+}
+.detail-pager button {
+  padding: 4px;
+  color: #b6cebb;
+}
+.detail-card .text-button:disabled {
+  color: #8b9385;
+}
+@media (max-width: 760px) {
+  .hotspot > span {
+    width: 39px;
+    height: 39px;
+    margin: 8px;
+  }
+  .hotspot strong {
+    font-size: 10px;
+  }
+  .cluster-popover {
+    width: min(268px, calc(100% - 24px));
+  }
+}
+.cluster-popover{pointer-events:auto}

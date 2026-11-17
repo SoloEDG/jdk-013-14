@@ -1,9 +1,11 @@
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import type { Entry, Hotspot, Position } from "../../../shared/types";
 import { loadEntries, persist } from "../lib/storage";
 export function createJournal() {
   const entries = ref<Entry[]>(loadEntries()),
     error = ref("");
+  /** 已收藏热点 id；聚合符号靠它显示“部分 / 全部已收藏”。 */
+  const savedIds = computed(() => new Set(entries.value.map((e) => e.hotspotId)));
   function commit(next: Entry[]) {
     if (!persist(next)) {
       error.value = "本地空间不足，记录未保存，请先导出手记";
@@ -15,7 +17,8 @@ export function createJournal() {
   return {
     entries,
     error,
-    has: (id: string) => entries.value.some((e) => e.hotspotId === id),
+    savedIds,
+    has: (id: string) => savedIds.value.has(id),
     save: (hotspot: Hotspot, position: Position) => {
       if (entries.value.some((e) => e.hotspotId === hotspot.id)) return;
       commit([

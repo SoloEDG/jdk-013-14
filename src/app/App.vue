@@ -86,10 +86,10 @@ async function fullscreen() {
                 >
               </div>
               <HotspotLayer
-                :items="w.discovery.visible.value"
+                :discovery="w.discovery"
                 :camera="w.camera.camera"
+                :saved-ids="w.journal.savedIds.value"
                 :enabled="w.discovery.enabled.value && !w.branch.personId.value"
-                @open="w.dispatch({ type: 'hotspot', id: $event })"
               />
               <div class="scene-caption">
                 <small
@@ -107,12 +107,12 @@ async function fullscreen() {
               </div></PanoramaView
             ><HotspotDetail
               v-if="w.discovery.detail.value && !w.branch.personId.value"
-              :hotspot="w.discovery.detail.value"
-              :saved="w.journal.has(w.discovery.detail.value.id)"
+              :detail="w.discovery.detail.value"
               @close="w.discovery.close()"
               @save="w.save()"
+              @move="w.discovery.move($event)"
               @interview="
-                w.enterPerson(w.discovery.detail.value?.personId || '')
+                w.enterPerson(w.discovery.detail.value?.hotspot.personId || '')
               "
             /><InterviewPanel
               :branch="w.branch"
